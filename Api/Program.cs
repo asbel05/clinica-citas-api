@@ -1,3 +1,4 @@
+using Api.Errors;
 using Application.Interfaces;
 using Application.Services;
 using Application.Validators.Citas;
@@ -31,11 +32,14 @@ builder.Services.AddScoped<IPacienteService, PacienteServiceImpl>();
 builder.Services.AddScoped<ICitaService, CitaServiceImpl>();
 
 builder.Services.AddControllers();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
