@@ -1,5 +1,6 @@
 using Application.DTOs.Citas;
 using Application.Interfaces;
+using Api.Errors;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/citas")]
+[Produces("application/json")]
 public class CitasController : ControllerBase
 {
     private readonly ICitaService _citaService;
@@ -18,9 +20,9 @@ public class CitasController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(CitaResponse), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<ActionResult<CitaResponse>> Create(
         [FromBody] CreateCitaRequest request, CancellationToken cancellationToken)
     {
@@ -45,7 +47,7 @@ public class CitasController : ControllerBase
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(CitaResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CitaResponse>> GetById(int id, CancellationToken cancellationToken)
     {
         var response = await _citaService.GetByIdAsync(id, cancellationToken);
@@ -55,9 +57,9 @@ public class CitasController : ControllerBase
 
     [HttpPatch("{id:int}/cancelar")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Cancel(int id, [FromBody] CancelCitaRequest request, CancellationToken cancellationToken)
     {
         await _citaService.CancelAsync(id, request, cancellationToken);

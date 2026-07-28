@@ -23,6 +23,8 @@ public class CitaRepositoryImpl : ICitaRepository
     public Task<Cita?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Citas
+            .Include(cita => cita.Doctor)
+            .Include(cita => cita.Paciente)
             .FirstOrDefaultAsync(cita => cita.Id == id, cancellationToken);
     }
 
@@ -31,6 +33,8 @@ public class CitaRepositoryImpl : ICitaRepository
     {
         var query = _context.Citas
             .AsNoTracking()
+            .Include(cita => cita.Doctor)
+            .Include(cita => cita.Paciente)
             .AsQueryable();
 
         if (doctorId.HasValue)

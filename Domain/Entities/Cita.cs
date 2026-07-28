@@ -10,6 +10,10 @@ public class Cita
 
     public int PacienteId { get; private set; }
 
+    public Doctor? Doctor { get; private set; }
+
+    public Paciente? Paciente { get; private set; }
+
     public DateTime FechaHoraInicio { get; private set; }
 
     public DateTime FechaHoraFin { get; private set; }

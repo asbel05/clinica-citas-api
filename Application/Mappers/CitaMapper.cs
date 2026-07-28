@@ -14,16 +14,21 @@ public static class CitaMapper
             request.FechaHoraFin);
     }
 
-    public static CitaResponse ToResponse(Cita cita)
+    public static CitaResponse ToResponse(Cita cita, Doctor? doctor = null, Paciente? paciente = null)
     {
+        doctor ??= cita.Doctor;
+        paciente ??= cita.Paciente;
+
         return new CitaResponse
         {
             Id = cita.Id,
-            DoctorId = cita.DoctorId,
-            PacienteId = cita.PacienteId,
+            DoctorNombre = doctor?.Nombre ?? string.Empty,
+            DoctorEspecialidad = doctor?.Especialidad ?? string.Empty,
+            PacienteNombre = paciente?.Nombre ?? string.Empty,
+            PacienteDocumentoIdentidad = paciente?.DocumentoIdentidad ?? string.Empty,
             FechaHoraInicio = cita.FechaHoraInicio,
             FechaHoraFin = cita.FechaHoraFin,
-            Estado = cita.Estado,
+            Estado = cita.Estado.ToString(),
             MotivoCancelacion = cita.MotivoCancelacion
         };
     }

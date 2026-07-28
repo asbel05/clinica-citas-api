@@ -103,7 +103,7 @@ public class CitaServiceImpl : ICitaService
         await _citaRepository.AddAsync(cita, cancellationToken);
         await _citaRepository.SaveChangesAsync(cancellationToken);
 
-        return CitaMapper.ToResponse(cita);
+        return CitaMapper.ToResponse(cita, doctor, paciente);
     }
 
     public async Task<IReadOnlyList<CitaResponse>> GetAsync(int? doctorId = null, int? pacienteId = null,
@@ -116,7 +116,7 @@ public class CitaServiceImpl : ICitaService
             cancellationToken);
 
         return citas
-            .Select(CitaMapper.ToResponse)
+            .Select(cita => CitaMapper.ToResponse(cita))
             .ToList();
     }
 

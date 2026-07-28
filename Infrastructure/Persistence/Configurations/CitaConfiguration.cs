@@ -34,12 +34,12 @@ public class CitaConfiguration : IEntityTypeConfiguration<Cita>
         builder.Property(appointment => appointment.MotivoCancelacion)
             .HasMaxLength(500);
 
-        builder.HasOne<Doctor>()
+        builder.HasOne(appointment => appointment.Doctor)
             .WithMany()
             .HasForeignKey(appointment => appointment.DoctorId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne<Paciente>()
+        builder.HasOne(appointment => appointment.Paciente)
             .WithMany()
             .HasForeignKey(appointment => appointment.PacienteId)
             .OnDelete(DeleteBehavior.Restrict);

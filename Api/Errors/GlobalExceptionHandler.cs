@@ -120,25 +120,21 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
     }
 
     private async ValueTask<bool> WriteProblemDetailsAsync(HttpContext httpContext, int statusCode,
-        string detail, string code, CancellationToken cancellationToken, object? errors = null, string? title = null)
+        string detail, string code, CancellationToken cancellationToken,
+        IDictionary<string, string[]>? errors = null, string? title = null)
     {
         httpContext.Response.StatusCode = statusCode;
 
-        var problemDetails = new ProblemDetails
+        var problemDetails = new ApiProblemDetails
         {
             Status = statusCode,
             Title = title ?? "Error en la solicitud",
             Detail = detail,
-            Instance = httpContext.Request.Path
+            Instance = httpContext.Request.Path,
+            Code = code,
+            TraceId = httpContext.TraceIdentifier,
+            Errors = errors
         };
-
-        problemDetails.Extensions["code"] = code;
-        problemDetails.Extensions["traceId"] = httpContext.TraceIdentifier;
-
-        if (errors is not null)
-        {
-            problemDetails.Extensions["errors"] = errors;
-        }
 
         await _problemDetailsService.WriteAsync(new ProblemDetailsContext
         {

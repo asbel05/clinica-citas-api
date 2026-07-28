@@ -1,11 +1,13 @@
 using Application.DTOs.Doctores;
 using Application.Interfaces;
+using Api.Errors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("api/doctores")]
+[Produces("application/json")]
 public class DoctoresController : ControllerBase
 {
     private readonly IDoctorService _doctorService;
@@ -17,7 +19,7 @@ public class DoctoresController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(DoctorResponse), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<DoctorResponse>> Create(
         [FromBody] CreateDoctorRequest request, CancellationToken cancellationToken)
     {
@@ -37,7 +39,7 @@ public class DoctoresController : ControllerBase
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(DoctorResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<DoctorResponse>> GetById(int id, CancellationToken cancellationToken)
     {
         var response = await _doctorService.GetByIdAsync(id, cancellationToken);
@@ -47,8 +49,8 @@ public class DoctoresController : ControllerBase
 
     [HttpPatch("{id:int}/desactivar")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Deactivate(int id, CancellationToken cancellationToken)
     {
         await _doctorService.DeactivateAsync(id, cancellationToken);
