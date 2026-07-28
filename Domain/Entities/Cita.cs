@@ -29,4 +29,10 @@ public class Cita
         FechaHoraInicio = fechaHoraInicio;
         FechaHoraFin = fechaHoraFin;
     }
+
+    public void Cancel(string? motivoCancelacion)
+    {
+        Estado = EstadoCita.Cancelada;
+        MotivoCancelacion = motivoCancelacion;
+    }
 }

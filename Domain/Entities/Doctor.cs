@@ -19,4 +19,9 @@ public class Doctor
         Nombre = nombre;
         Especialidad = especialidad;
     }
+
+    public void Deactivate()
+    {
+        Activo = false;
+    }
 }
